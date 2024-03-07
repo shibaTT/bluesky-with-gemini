@@ -79,4 +79,4 @@ class Gemini():
             response.text
             return response.text
         except:
-            return "エラーが発生しました。もう一度試してね"
+            return None

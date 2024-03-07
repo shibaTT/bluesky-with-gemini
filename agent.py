@@ -61,7 +61,10 @@ class BskyAgent():
 
                 try:
                     reply_text = self.gemini.generate_response()
-                    message = f"ログインボーナス！今日は「{reply_text}」をプレゼントするわ！"
+                    if reply_text:
+                        message = f"ログインボーナス！今日は「{reply_text}」をプレゼントするわ！"
+                    else:
+                        message = "エラーが発生しました。もう一度試してね"
 
                     reply_model_ref = models.create_strong_ref(reply.post)
                     reply_to = models.AppBskyFeedPost.ReplyRef(parent=reply_model_ref, root=reply_model_ref)
