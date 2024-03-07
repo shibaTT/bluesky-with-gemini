@@ -1,0 +1,5 @@
+annotated-types==0.6.0
+atproto==0.0.44
+google-generativeai==0.4.0
+python-dotenv==1.0.1
+schedule==1.2.1
