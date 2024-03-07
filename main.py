@@ -14,6 +14,8 @@ def main():
     client = Client()
     client.login(os.getenv('BS_USERNAME'), os.getenv('BS_PASSWORD'))
 
+    print("Blueskyにログインしたお")
+
     gemini = Gemini()
     agent = BskyAgent(client, gemini)
     # agent.read_post_file()
