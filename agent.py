@@ -41,7 +41,7 @@ class BskyAgent():
             pickle.dump(responded, f)
 
     def login_bonus(self):
-        post = self.client.send_post(text="tesuto dayoooooOO")
+        post = self.client.send_post(text="ログインボーナス")
         self.write_post_file(post.uri)
 
     def read_replies(self):
