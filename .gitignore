@@ -1,3 +1,16 @@
 .env
 .env.local
 *.pickle
+__pycache__/
+*.egg-info/
+*.egg
+*.log
+*.pid
+*.pyo
+*.pyd
+*.so
+*.swp
+*.sqlite3
+*.tgz
+*.zip
+*.xz
