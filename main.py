@@ -24,12 +24,12 @@ def main():
     schedule.every(60).seconds.do(agent.read_replies)
 
     # 1日1回（18時）ログインボーナス
-    schedule.every().days.at("18:00").do(agent.login_bonus)
+    schedule.every().day.at("18:00").do(agent.login_bonus)
 
     while True:
         schedule.run_pending()
         # print(gemini.generate_response())
-        sleep(5)
+        sleep(1)
 
 
 if __name__ == "__main__":
