@@ -14,14 +14,14 @@ class BskyAgent():
         #     f = open("posts.pickle", "wb")
         #     f.close()
 
-    def read_post_file(self) -> list[str]:
+    def read_post_file(self) -> "list[str]":
         if not os.path.isfile("posts.pickle"):
             return []
 
         # print(pickle.load(open("posts.pickle", "rb")))
         return pickle.load(open("posts.pickle", "rb"))
 
-    def read_responded_file(self) -> set[str]:
+    def read_responded_file(self) -> "set[str]":
         if not os.path.isfile("responded.pickle"):
             return set()
 
@@ -29,7 +29,7 @@ class BskyAgent():
         return pickle.load(open("responded.pickle", "rb"))
 
     def write_post_file(self, uri: str):
-        posts = self.read_file()
+        posts = self.read_post_file()
         with open("posts.pickle", "wb") as f:
             posts.append(uri)
             pickle.dump(posts, f)
