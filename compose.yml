@@ -7,3 +7,5 @@ services:
             - ./:/app
         ports:
             - "9090:9090"
+        environment:
+            - TZ=Asia/Tokyo
