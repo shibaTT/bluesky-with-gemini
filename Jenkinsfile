@@ -17,8 +17,8 @@ pipeline {
         }
         stage("docker build"){
             steps{
-                echo "Docker Restart"
-                sh "docker compose up -d --build"
+                echo "Docker build"
+                sh "sudo docker compose up -d --build"
             }
             //ステップ終了処理
             post{
