@@ -4,7 +4,7 @@ pipeline {
         stage("build"){
             steps{
                 echo "ビルド開始"
-                sh "echo ${params.envs} > .env.local"
+                writeFile(file: ".env.local", text: "${envs}")
                 sh "echo 'test' > .env"
                 echo "パラメタ"
             }
@@ -19,7 +19,7 @@ pipeline {
         stage("docker build"){
             steps{
                 echo "Docker Restart"
-                sh "docker compose up blusky-with-gemini -d --build"
+                sh "docker compose up -d --build"
             }
             //ステップ終了処理
             post{
