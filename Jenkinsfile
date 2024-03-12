@@ -1,16 +1,10 @@
 pipeline {
     agent any // 環境の指定（anyなので指定なし）
-    environment {
-        work_dir='/git/bluesky-with-gemini'
-    }
     stages{
         stage("build"){
             steps{
-                dir(work_dir){
-                    echo "ビルド開始"
-                    sh "cd /git/bluesky-with-gemini"
-                    sh "git pull"
-                }
+                echo "ビルド開始（環境変数コピー）"
+                sh "cp ~/git/bluesky-with-gemini/.env.local .env.local"
             }
             //ステップ終了処理
             post{
@@ -28,12 +22,10 @@ pipeline {
                 }
             }
         }
-        stage("restart docker"){
+        stage("docker build"){
             steps{
-                dir(work_dir){
-                    echo "Docker Restart"
-                    sh "sudo docker restart blusky-with-gemini"
-                }
+                echo "Docker Restart"
+                sh "sudo docker compose up blusky-with-gemini -d --build"
             }
             //ステップ終了処理
             post{
