@@ -4,8 +4,7 @@ pipeline {
         stage("build"){
             steps{
                 echo "ビルド開始"
-                writeFile(file: ".env.local", text: "test")
-                sh "echo 'test' > .env"
+                writeFile(file: ".env.local", text: "${envs}")
                 echo "パラメタ"
             }
             //ステップ終了処理
@@ -16,19 +15,19 @@ pipeline {
                 }
             }
         }
-        // stage("docker build"){
-        //     steps{
-        //         echo "Docker Restart"
-        //         sh "docker compose up -d --build"
-        //     }
-        //     //ステップ終了処理
-        //     post{
-        //         //常に実行
-        //         always{
-        //             echo "========Docker start終了========"
-        //         }
-        //     }
-        // }
+        stage("docker build"){
+            steps{
+                echo "Docker Restart"
+                sh "docker compose up -d --build"
+            }
+            //ステップ終了処理
+            post{
+                //常に実行
+                always{
+                    echo "========Docker start終了========"
+                }
+            }
+        }
     }
     post{
         always{
