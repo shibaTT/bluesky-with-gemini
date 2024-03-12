@@ -9,11 +9,6 @@ class BskyAgent():
         self.client = client
         self.gemini = gemini
 
-        # is_file = os.path.isfile("posts.pickle")
-        # if not is_file:
-        #     f = open("posts.pickle", "wb")
-        #     f.close()
-
     def read_post_file(self) -> "list[str]":
         if not os.path.isfile("posts.pickle"):
             return []
