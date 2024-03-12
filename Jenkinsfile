@@ -5,6 +5,7 @@ pipeline {
             steps{
                 echo "ビルド開始"
                 sh "echo ${params.envs} > .env.local"
+                sh "echo 'test' > .env"
                 echo "パラメタ"
             }
             //ステップ終了処理
@@ -18,7 +19,7 @@ pipeline {
         stage("docker build"){
             steps{
                 echo "Docker Restart"
-                sh "sudo docker compose up blusky-with-gemini -d --build"
+                sh "docker compose up blusky-with-gemini -d --build"
             }
             //ステップ終了処理
             post{
