@@ -4,8 +4,8 @@ pipeline {
         stage("build"){
             steps{
                 echo "ビルド開始"
-                cd /git/bluesky-with-gemini
-                git pull
+                sh "cd /git/bluesky-with-gemini"
+                sh "git pull"
             }
             //ステップ終了処理
             post{
@@ -26,7 +26,7 @@ pipeline {
         stage("restart docker"){
             steps{
                 echo "Docker Restart"
-                sudo docker restart blusky-with-gemini
+                sh "sudo docker restart blusky-with-gemini"
             }
             //ステップ終了処理
             post{
