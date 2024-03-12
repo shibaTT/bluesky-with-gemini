@@ -3,22 +3,14 @@ pipeline {
     stages{
         stage("build"){
             steps{
-                echo "ビルド開始（環境変数コピー）"
-                sh "cp ~/git/bluesky-with-gemini/.env.local .env.local"
+                echo "ビルド開始"
+                sh "docker run -e BS_USERNAME=${params.BS_USERNAME} BS_PASSWORD=${params.BS_PASSWORD} GOOGLE_API_KEY=${params.GOOGLE.API.KEY} bluesky-with-gemini env"
             }
             //ステップ終了処理
             post{
                 //常に実行
                 always{
                     echo "========ビルド終了========"
-                }
-                //成功時
-                success{
-                    echo "========ビルド完了========"
-                }
-                //失敗時
-                failure{
-                    echo "========ビルド失敗========"
                 }
             }
         }
@@ -31,15 +23,7 @@ pipeline {
             post{
                 //常に実行
                 always{
-                    echo "========Docker Restart終了========"
-                }
-                //成功時
-                success{
-                    echo "========Docker Restart完了========"
-                }
-                //失敗時
-                failure{
-                    echo "========Docker Restart失敗========"
+                    echo "========Docker start終了========"
                 }
             }
         }
