@@ -18,7 +18,7 @@ pipeline {
         stage("docker build"){
             steps{
                 echo "Docker build"
-                sh "sudo docker compose up -d --build"
+                sh "echo ${password} | sudo -S docker compose up -d --build"
             }
             //ステップ終了処理
             post{
