@@ -4,8 +4,8 @@ pipeline {
         stage("build"){
             steps{
                 echo "ビルド開始"
-                echo "${params.BS_USERNAME}"
-                sh "docker run -e BS_USERNAME=${params.BS_USERNAME} BS_PASSWORD=${params.BS_PASSWORD} GOOGLE_API_KEY=${params.GOOGLE.API.KEY} bluesky-with-gemini env"
+                sh "echo ${params.envs} > .env.local"
+                echo "パラメタ"
             }
             //ステップ終了処理
             post{
