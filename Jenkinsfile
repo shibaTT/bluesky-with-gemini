@@ -1,8 +1,5 @@
 pipeline {
     agent any // 環境の指定（anyなので指定なし）
-    environment {
-
-    }
     stages{
         stage("build"){
             steps{
