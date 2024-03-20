@@ -5,16 +5,32 @@ from dotenv import load_dotenv
 from atproto import Client
 from agent import BskyAgent
 from gemini import Gemini
+import axiom
+import rfc3339
+from datetime import datetime
+import sentry_sdk
 
 
+# envの読み込み
 load_dotenv(".env.local")
+
+# sentryの読み込み
+sentry_sdk.init(dsn=os.getenv("SENTRY_DSN"), enable_tracing=True)
 
 
 def main():
     client = Client()
-    client.login(os.getenv('BS_USERNAME'), os.getenv('BS_PASSWORD'))
+    client.login(os.getenv("BS_USERNAME"), os.getenv("BS_PASSWORD"))
 
     print("Blueskyにログインしたお")
+    # axiomにログイン
+    axiom_client = axiom.Client()
+    time = datetime.now()
+    time_formatted = rfc3339.format(time)
+    axiom_client.ingest_events(
+        dataset="bluesky-with-gemini",
+        events=[{"info": "Blueskyにログインした", "_time": time_formatted}],
+    )
 
     gemini = Gemini()
     agent = BskyAgent(client, gemini)

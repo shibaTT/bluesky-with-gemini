@@ -1,12 +1,18 @@
 import os
 import google.generativeai as ai
+import axiom
+import rfc3339
+from datetime import datetime
 
 
-class Gemini():
+class Gemini:
     def __init__(self):
+        # axiomにログイン
+        self.axiom_client = axiom.Client()
+
         GENERATION_CONFIG = {
-            "max_output_tokens": 512,   # トークンの最大値
-            "temperature": 0.9,         # 返答のランダム性
+            "max_output_tokens": 512,  # トークンの最大値
+            "temperature": 0.9,  # 返答のランダム性
         }
 
         prompt = """
@@ -26,7 +32,7 @@ class Gemini():
             4-7. とても悪い報酬は滅多に出ない
             4-8. ゲームに出てくるようなアイテムはたまに出る
         5. 報酬は少しクスっとするようなものだと良いです。
-        
+
         返答の例:
         ## とても良い報酬〜ささやかな報酬
         - 宝くじにあたって3億円もらえる
@@ -67,10 +73,23 @@ class Gemini():
         """
 
         ai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-        self.gemini = ai.GenerativeModel("gemini-pro", generation_config=GENERATION_CONFIG)
+        self.gemini = ai.GenerativeModel(
+            "gemini-pro", generation_config=GENERATION_CONFIG
+        )
         # print(self.gemini)
         self.chat = self.gemini.start_chat(history=[])
         print(self.chat.send_message(prompt).text)
+        time = datetime.now()
+        time_formatted = rfc3339.format(time)
+        self.axiom_client.ingest_events(
+            dataset="bluesky-with-gemini",
+            events=[
+                {
+                    "info": self.chat.send_message(prompt).text,
+                    "_time": time_formatted,
+                }
+            ],
+        )
 
     def generate_response(self):
         try:
