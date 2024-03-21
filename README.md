@@ -8,6 +8,13 @@ GoogleのLLMであるGemini Proを使って毎日ログインボーナスの報�
 
 ただGeminiのAPIは2024年内には有料化するらしいのでおそらく半年も持たなさそう
 
+## 接続サービス
+JenkinsでGitHubへのPushを検知してJenkinsでビルドするようにしている
+
+あと、エラーログをSentryで検知、そしてDEBUGやInfoのログをAxiomに送信している
+
+おそらくenvにそれらのTokenを入れなくても動くと思うが検証してないのでわからない（Sentryはなくても動いた）
+
 ## 注意点
 
 フォークはご自由にどうぞ
