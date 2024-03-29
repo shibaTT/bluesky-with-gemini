@@ -16,7 +16,7 @@ class BskyAgent:
         # axiomにログイン
         self.axiom_client = axiom.Client()
 
-    def get_time() -> str:
+    def get_time(self) -> str:
         time = datetime.now()
         return rfc3339.format(time)
 
