@@ -1,10 +1,11 @@
 import pickle
 import os
 from gemini import Gemini
-from atproto import Client, models
+from atproto import Client, models, exceptions
 import axiom
 import rfc3339
 from datetime import datetime
+import logging
 
 
 class BskyAgent:
@@ -59,7 +60,14 @@ class BskyAgent:
         posts = self.read_post_file()
 
         for post in posts:
-            res = self.client.get_post_thread(post, 1)
+            try:
+                res = self.client.get_post_thread(post, 1)
+            except exceptions.AtProtocolError as e:
+                logging.error("ポスト取得エラー:", e)
+                continue
+            except Exception as e:
+                logging.error("不明なエラー:", e)
+                continue
             # res_dict = models.get_model_as_dict(res)
             # print(res_dict["thread"]["replies"])
             # for reply in res_dict["thread"]["replies"]:
