@@ -1,6 +1,6 @@
 annotated-types==0.6.0
 atproto==0.0.44
-google-generativeai==0.4.0
+cohere==5.5.0
 python-dotenv==1.0.1
 schedule==1.2.1
 axiom-py==0.3.0
