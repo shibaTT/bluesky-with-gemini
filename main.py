@@ -4,7 +4,7 @@ from time import sleep
 from dotenv import load_dotenv
 from atproto import Client
 from agent import BskyAgent
-from gemini import Gemini
+import cohere
 import axiom
 import rfc3339
 from datetime import datetime
@@ -32,8 +32,8 @@ def main():
         events=[{"info": "Blueskyにログインした", "_time": time_formatted}],
     )
 
-    gemini = Gemini()
-    agent = BskyAgent(client, gemini)
+    co = cohere.Client(os.getenv("COHERE_API_KEY"))
+    agent = BskyAgent(client, co)
     # agent.read_post_file()
 
     # 1分おきにリプライ確認
@@ -41,6 +41,7 @@ def main():
 
     # 1日1回（18時）ログインボーナス
     schedule.every().day.at("18:00").do(agent.login_bonus)
+    agent.login_bonus()
 
     while True:
         schedule.run_pending()

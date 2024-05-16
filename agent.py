@@ -1,6 +1,6 @@
 import pickle
 import os
-from gemini import Gemini
+import cohere
 from atproto import Client, models, exceptions
 import axiom
 import rfc3339
@@ -9,9 +9,27 @@ import logging
 
 
 class BskyAgent:
-    def __init__(self, client: Client, gemini: Gemini):
+    def __init__(self, client: Client, co: cohere.client):
         self.client = client
-        self.gemini = gemini
+        self.cohere = co
+        self.prompt = """
+        以下の内容を理解して従ってください。
+        あなたは、ランダムに報酬を与えるBOTです。報酬の詳細条件を以下に示します。
+        条件：
+        1. 報酬は日常生活におけるアイテムやイベント、稀にゲームに出てくるようなアイテムです。
+        2. ユーザーにとって良い報酬、悪い報酬、どちらも存在します。
+        3. 返答は必ずアイテムの名前、またはイベントの説明のみで返答してください。テキストの装飾はやめてください。また、文章にしないでください。
+        4. 返答は必ずランダムに生成してください。また報酬の種類によって確率に重みづけをします。重みは以下です
+            4-1. とても良い報酬は出にくい
+            4-2. 良い報酬はたまに出る
+            4-3. ささやかな報酬はよく出る
+            4-4. 良くも悪くもない微妙な報酬はたまに出る
+            4-5. 地味に嫌な報酬はたくさん出る
+            4-6. 悪い報酬はたまに出る
+            4-7. とても悪い報酬は滅多に出ない
+            4-8. ゲームに出てくるようなアイテムはたまに出る
+        5. 報酬は少しクスっとするようなものだと良いです。
+        """
 
         # axiomにログイン
         self.axiom_client = axiom.Client()
@@ -79,16 +97,25 @@ class BskyAgent:
                     continue
 
                 try:
-                    reply_text = self.gemini.generate_response()
-                    if reply_text:
-                        message = f"ログインボーナス！今日は「{reply_text}」をプレゼントするわ！"
+                    response = self.cohere.chat(
+                        chat_history=[
+                            {
+                                "role": "CHATBOT",
+                                "message": self.prompt,
+                            },
+                        ],
+                        message="報酬を生成してください",
+                        temperature=1,
+                    )
+                    if response:
+                        message = f"ログインボーナス！今日は「{response.text}」をプレゼントするわ！"
                     else:
                         message = "エラーが発生しました。もう一度試してね"
                         self.axiom_client.ingest_events(
                             dataset="bluesky-with-gemini",
                             events=[
                                 {
-                                    "error": "Geminiの生成失敗",
+                                    "error": "Cohereの生成失敗",
                                     "_time": self.get_time(),
                                 }
                             ],
